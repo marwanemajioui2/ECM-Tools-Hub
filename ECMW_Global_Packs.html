@@ -13,11 +13,25 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-color: #f5f7fa;
+            --dark-color: #2c3e50;
+            --gray-color: #7f8c8d;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
         body {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
             padding: 20px;
-            color: #333;
+            color: var(--dark-color);
         }
         
         .container {
@@ -32,13 +46,14 @@
             margin-bottom: 20px;
             padding: 20px;
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
         }
         
         h1 {
-            color: #2c3e50;
+            color: var(--dark-color);
             font-size: 28px;
+            font-weight: 600;
         }
         
         .logo {
@@ -49,7 +64,7 @@
         
         .logo i {
             font-size: 32px;
-            color: #3498db;
+            color: var(--primary-color);
         }
         
         .controls {
@@ -61,17 +76,24 @@
         
         .search-box {
             flex: 1;
-            min-width: 250px;
+            min-width: 300px;
             position: relative;
         }
         
         .search-box input {
             width: 100%;
             padding: 12px 15px 12px 45px;
-            border: none;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
         }
         
         .search-box i {
@@ -79,75 +101,113 @@
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: #7f8c8d;
+            color: var(--gray-color);
         }
         
         .filter-controls {
             display: flex;
-            gap: 15px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         
         select, button {
             padding: 12px 15px;
-            border: none;
-            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius);
             background: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             font-size: 14px;
             cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        select:focus, button:focus {
+            outline: none;
+            border-color: var(--primary-color);
         }
         
         button {
-            background: #3498db;
+            background: var(--primary-color);
             color: white;
             font-weight: 600;
-            transition: background 0.3s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
         button:hover {
-            background: #2980b9;
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        button:active {
+            transform: translateY(0);
         }
         
         .data-container {
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
             overflow: hidden;
         }
         
         .table-container {
             overflow-x: auto;
             max-height: 600px;
+            position: relative;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 1400px;
         }
         
         th, td {
-            padding: 12px 10px;
+            padding: 14px 12px;
             text-align: left;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #f0f0f0;
             font-size: 14px;
+            line-height: 1.4;
         }
         
         th {
-            background: #f8f9fa;
+            background: #f8fafc;
             font-weight: 600;
+            color: var(--dark-color);
             cursor: pointer;
             user-select: none;
             position: relative;
             white-space: nowrap;
+            transition: var(--transition);
         }
         
         th:hover {
             background: #e8f4fc;
         }
         
+        th.sortable {
+            padding-right: 30px;
+        }
+        
         th i {
-            margin-left: 5px;
-            color: #3498db;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            opacity: 0.6;
+            transition: var(--transition);
+        }
+        
+        th.sort-asc i,
+        th.sort-desc i {
+            opacity: 1;
+        }
+        
+        tr {
+            transition: var(--transition);
         }
         
         tr:hover {
@@ -157,92 +217,170 @@
         .pagination {
             display: flex;
             justify-content: center;
+            align-items: center;
             padding: 20px;
-            gap: 10px;
+            gap: 8px;
+            background: #f8fafc;
+            border-top: 1px solid #e0e0e0;
         }
         
         .pagination button {
             background: white;
-            color: #3498db;
+            color: var(--primary-color);
             width: 40px;
             height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: 600;
+        }
+        
+        .pagination button:hover:not(.active):not(:disabled) {
+            background: #e8f4fc;
         }
         
         .pagination button.active {
-            background: #3498db;
+            background: var(--primary-color);
             color: white;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .pagination-info {
+            margin: 0 15px;
+            color: var(--gray-color);
+            font-size: 14px;
         }
         
         .stats {
             margin-top: 20px;
             text-align: center;
-            color: #7f8c8d;
-        }
-        
-        .status-active {
-            color: #2ecc71;
-            font-weight: 600;
-        }
-        
-        .status-inactive {
-            color: #e74c3c;
-            font-weight: 600;
+            color: var(--gray-color);
+            font-size: 14px;
         }
         
         .badge {
             display: inline-block;
-            padding: 3px 8px;
+            padding: 4px 10px;
             border-radius: 4px;
             font-size: 12px;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .badge-local {
             background: #e8f4fc;
-            color: #3498db;
+            color: var(--primary-color);
+            border: 1px solid #c3ddf9;
         }
         
         .badge-external {
             background: #ffe8e8;
-            color: #e74c3c;
+            color: var(--danger-color);
+            border: 1px solid #f9c3c3;
         }
         
         .badge-oui {
             background: #e7f6e9;
-            color: #27ae60;
+            color: var(--success-color);
+            border: 1px solid #c3e9c8;
         }
         
         .badge-non {
             background: #fbebeb;
-            color: #c0392b;
+            color: var(--danger-color);
+            border: 1px solid #f9c3c3;
         }
         
-        .day-cell {
-            max-width: 120px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+        .badge-active {
+            background: #e7f6e9;
+            color: var(--success-color);
+        }
+        
+        .badge-inactive {
+            background: #fbebeb;
+            color: var(--danger-color);
+        }
+        
+        .badge-warning {
+            background: #fef5e7;
+            color: var(--warning-color);
+        }
+        
+        .status-cell {
+            font-weight: 600;
+        }
+        
+        .status-repo {
+            color: var(--primary-color);
+        }
+        
+        .status-verification {
+            color: var(--warning-color);
+        }
+        
+        .status-repoting {
+            color: var(--success-color);
+        }
+        
+        .status-empty {
+            color: var(--gray-color);
         }
         
         .notes-cell {
             max-width: 200px;
+            white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
         }
         
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
+        .notes-cell:hover {
+            white-space: normal;
+            overflow: visible;
+            position: relative;
+            z-index: 10;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 10px;
+            border-radius: var(--border-radius);
+        }
+        
+        .export-btn {
+            background: var(--success-color);
+        }
+        
+        .export-btn:hover {
+            background: #27ae60;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: var(--gray-color);
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray-color);
+        }
+        
+        @media (max-width: 1200px) {
+            .container {
+                padding: 0 10px;
             }
             
-            .controls {
-                flex-direction: column;
+            .search-box {
+                min-width: 100%;
             }
             
             .filter-controls {
@@ -251,11 +389,57 @@
             
             select, button {
                 flex: 1;
+                min-width: 120px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .controls {
+                gap: 10px;
             }
             
             th, td {
-                padding: 8px 6px;
-                font-size: 12px;
+                padding: 10px 8px;
+                font-size: 13px;
+            }
+            
+            .pagination {
+                padding: 15px 10px;
+            }
+            
+            .pagination button {
+                width: 36px;
+                height: 36px;
+                font-size: 13px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .logo i {
+                font-size: 28px;
+            }
+            
+            .filter-controls {
+                flex-direction: column;
+            }
+            
+            select, button {
+                width: 100%;
             }
         }
     </style>
@@ -264,16 +448,19 @@
     <div class="container">
         <header>
             <div class="logo">
-                <i class="fas fa-table"></i>
+                <i class="fas fa-database"></i>
                 <h1>ECMW Global Packs</h1>
             </div>
-            <button id="exportBtn"><i class="fas fa-file-export"></i> Export Data</button>
+            <button id="exportBtn" class="export-btn">
+                <i class="fas fa-file-export"></i>
+                <span class="btn-text">Export CSV</span>
+            </button>
         </header>
         
         <div class="controls">
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Search across all data...">
+                <input type="text" id="searchInput" placeholder="Search across all columns...">
             </div>
             
             <div class="filter-controls">
@@ -291,6 +478,8 @@
                     <option value="ADD contact">ADD contact</option>
                     <option value="Repoting">Repoting</option>
                     <option value="EMPTY">EMPTY</option>
+                    <option value="LOGING">LOGING</option>
+                    <option value="Hold">Hold</option>
                 </select>
                 
                 <select id="platformFilter">
@@ -300,38 +489,53 @@
                 </select>
                 
                 <select id="localFilter">
-                    <option value="">All Local/External</option>
+                    <option value="">All Locations</option>
                     <option value="Local">Local</option>
                     <option value="External">External</option>
                 </select>
                 
-                <button id="resetFilters"><i class="fas fa-redo"></i> Reset</button>
+                <select id="teamFilter">
+                    <option value="">All Teams</option>
+                    <option value="A">Team A</option>
+                    <option value="B">Team B</option>
+                    <option value="C">Team C</option>
+                    <option value="Empty">Empty</option>
+                </select>
+                
+                <button id="resetFilters">
+                    <i class="fas fa-redo"></i>
+                    <span class="btn-text">Reset</span>
+                </button>
             </div>
         </div>
         
         <div class="data-container">
+            <div class="loading" id="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading data...
+            </div>
+            
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
-                            <th data-sort="entity">Entity <i class="fas fa-sort"></i></th>
-                            <th data-sort="entityProd">EntityProd <i class="fas fa-sort"></i></th>
-                            <th data-sort="platform">Platform <i class="fas fa-sort"></i></th>
-                            <th data-sort="team">Team <i class="fas fa-sort"></i></th>
-                            <th data-sort="localExternal">Local/External <i class="fas fa-sort"></i></th>
-                            <th data-sort="pack">Pack <i class="fas fa-sort"></i></th>
-                            <th data-sort="dataSeeds">DATA Seeds <i class="fas fa-sort"></i></th>
-                            <th data-sort="server">SERVER <i class="fas fa-sort"></i></th>
-                            <th data-sort="disk">Disk <i class="fas fa-sort"></i></th>
-                            <th data-sort="rdps">RDPS: Session <i class="fas fa-sort"></i></th>
-                            <th data-sort="password">Password <i class="fas fa-sort"></i></th>
-                            <th data-sort="interval">iNTERVAL <i class="fas fa-sort"></i></th>
-                            <th data-sort="browser">BROWSER <i class="fas fa-sort"></i></th>
-                            <th data-sort="status">Status <i class="fas fa-sort"></i></th>
-                            <th data-sort="countProfiles">Count Profiles <i class="fas fa-sort"></i></th>
-                            <th data-sort="totalSeedsOk">Total Seeds ok <i class="fas fa-sort"></i></th>
-                            <th data-sort="backup">Backup <i class="fas fa-sort"></i></th>
-                            <th data-sort="notes">Notes <i class="fas fa-sort"></i></th>
+                            <th class="sortable" data-sort="entity">Entity <i class="fas fa-sort"></i></th>
+                            <th class="sortable" data-sort="entityProd">EntityProd <i class="fas fa-sort"></i></th>
+                            <th class="sortable" data-sort="platform">Platform <i class="fas fa-sort"></i></th>
+                            <th class="sortable" data-sort="team">Team <i class="fas fa-sort"></i></th>
+                            <th class="sortable" data-sort="localExternal">Location <i class="fas fa-sort"></i></th>
+                            <th class="sortable" data-sort="pack">Pack <i class="fas fa-sort"></i></th>
+                            <th class="sortable" data-sort="dataSeeds">Data Seeds <i class="fas fa-sort"></i></th>
+                            <th class="sortable" data-sort="server">Server <i class="fas fa-sort"></i></th>
+                            <th class="sortable" data-sort="disk">Disk <i class="fas fa-sort"></i></th>
+                            <th class="sortable" data-sort="rdps">RDPS Session <i class="fas fa-sort"></i></th>
+                            <th class="sortable" data-sort="password">Password <i class="fas fa-sort"></i></th>
+                            <th class="sortable" data-sort="interval">Interval <i class="fas fa-sort"></i></th>
+                            <th class="sortable" data-sort="browser">Browser <i class="fas fa-sort"></i></th>
+                            <th class="sortable" data-sort="status">Status <i class="fas fa-sort"></i></th>
+                            <th class="sortable" data-sort="countProfiles">Profiles <i class="fas fa-sort"></i></th>
+                            <th class="sortable" data-sort="totalSeedsOk">Seeds OK <i class="fas fa-sort"></i></th>
+                            <th class="sortable" data-sort="backup">Backup <i class="fas fa-sort"></i></th>
+                            <th data-sort="notes">Notes</th>
                         </tr>
                     </thead>
                     <tbody id="dataBody">
@@ -346,371 +550,438 @@
         </div>
         
         <div class="stats">
-            <p id="statsText">Showing 0 of 0 entries</p>
+            <p id="statsText">Loading data...</p>
         </div>
     </div>
 
     <script>
-        // Your Excel data transformed into JavaScript format
+        // Improved Data Handler Class
+        class DataManager {
+            constructor(data) {
+                this.originalData = [...data];
+                this.filteredData = [...data];
+                this.currentSort = { column: null, direction: 'asc' };
+                this.currentPage = 1;
+                this.rowsPerPage = 10;
+                this.filters = {};
+            }
+
+            applyFilters(filters) {
+                this.filters = filters;
+                this.filteredData = this.originalData.filter(item => {
+                    // Search filter
+                    if (filters.search && filters.search.trim()) {
+                        const searchTerm = filters.search.toLowerCase();
+                        const searchableFields = [
+                            'entity', 'entityProd', 'platform', 'team',
+                            'pack', 'status', 'server', 'rdps', 'browser'
+                        ];
+                        
+                        const matchesSearch = searchableFields.some(field => 
+                            item[field] && item[field].toString().toLowerCase().includes(searchTerm)
+                        );
+                        if (!matchesSearch) return false;
+                    }
+
+                    // Other filters
+                    for (const [key, value] of Object.entries(filters)) {
+                        if (value && key !== 'search' && item[key] !== value) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                });
+                
+                this.currentPage = 1;
+                return this.filteredData;
+            }
+
+            sort(column) {
+                if (this.currentSort.column === column) {
+                    this.currentSort.direction = this.currentSort.direction === 'asc' ? 'desc' : 'asc';
+                } else {
+                    this.currentSort.column = column;
+                    this.currentSort.direction = 'asc';
+                }
+
+                this.filteredData.sort((a, b) => {
+                    let aVal = a[column];
+                    let bVal = b[column];
+
+                    // Handle numeric values
+                    if (['countProfiles', 'totalSeedsOk'].includes(column)) {
+                        aVal = parseFloat(aVal) || 0;
+                        bVal = parseFloat(bVal) || 0;
+                    }
+
+                    // Handle string comparison
+                    if (typeof aVal === 'string') aVal = aVal.toLowerCase();
+                    if (typeof bVal === 'string') bVal = bVal.toLowerCase();
+
+                    if (aVal < bVal) return this.currentSort.direction === 'asc' ? -1 : 1;
+                    if (aVal > bVal) return this.currentSort.direction === 'asc' ? 1 : -1;
+                    return 0;
+                });
+            }
+
+            getPaginatedData() {
+                const start = (this.currentPage - 1) * this.rowsPerPage;
+                const end = start + this.rowsPerPage;
+                return this.filteredData.slice(start, end);
+            }
+
+            getTotalPages() {
+                return Math.ceil(this.filteredData.length / this.rowsPerPage);
+            }
+
+            getStats() {
+                const start = (this.currentPage - 1) * this.rowsPerPage + 1;
+                const end = Math.min(this.currentPage * this.rowsPerPage, this.filteredData.length);
+                const total = this.filteredData.length;
+                
+                return { start, end, total };
+            }
+        }
+
+        // Improved UI Manager Class
+        class UIManager {
+            constructor() {
+                this.elements = {
+                    dataBody: document.getElementById('dataBody'),
+                    searchInput: document.getElementById('searchInput'),
+                    entityFilter: document.getElementById('entityFilter'),
+                    statusFilter: document.getElementById('statusFilter'),
+                    platformFilter: document.getElementById('platformFilter'),
+                    localFilter: document.getElementById('localFilter'),
+                    teamFilter: document.getElementById('teamFilter'),
+                    resetFiltersBtn: document.getElementById('resetFilters'),
+                    exportBtn: document.getElementById('exportBtn'),
+                    pagination: document.getElementById('pagination'),
+                    statsText: document.getElementById('statsText'),
+                    loading: document.getElementById('loading')
+                };
+                
+                this.debounceTimeout = null;
+                this.initSortIcons();
+            }
+
+            initSortIcons() {
+                document.querySelectorAll('th.sortable').forEach(th => {
+                    th.addEventListener('click', () => {
+                        const column = th.dataset.sort;
+                        document.dispatchEvent(new CustomEvent('sortRequested', { detail: column }));
+                    });
+                });
+            }
+
+            renderTable(data) {
+                if (!data || data.length === 0) {
+                    this.elements.dataBody.innerHTML = `
+                        <tr>
+                            <td colspan="18" class="no-data">
+                                <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px;"></i>
+                                <p>No data found matching your criteria</p>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                this.elements.dataBody.innerHTML = data.map(item => `
+                    <tr>
+                        <td>${this.escapeHtml(item.entity)}</td>
+                        <td>${this.escapeHtml(item.entityProd)}</td>
+                        <td>${this.escapeHtml(item.platform)}</td>
+                        <td>${this.escapeHtml(item.team)}</td>
+                        <td><span class="badge ${item.localExternal === 'Local' ? 'badge-local' : 'badge-external'}">${item.localExternal}</span></td>
+                        <td>${this.escapeHtml(item.pack)}</td>
+                        <td><span class="badge ${item.dataSeeds === 'oui' ? 'badge-oui' : 'badge-non'}">${item.dataSeeds}</span></td>
+                        <td>${this.escapeHtml(item.server)}</td>
+                        <td>${this.escapeHtml(item.disk)}</td>
+                        <td>${this.escapeHtml(item.rdps)}</td>
+                        <td><code>${this.escapeHtml(item.password)}</code></td>
+                        <td><small>${this.escapeHtml(item.interval)}</small></td>
+                        <td>${this.escapeHtml(item.browser)}</td>
+                        <td class="status-cell status-${item.status.toLowerCase().replace(/\s+/g, '-')}">${this.escapeHtml(item.status)}</td>
+                        <td><strong>${this.escapeHtml(item.countProfiles)}</strong></td>
+                        <td><span class="badge ${item.totalSeedsOk === 'Oui' ? 'badge-oui' : 'badge-non'}">${this.escapeHtml(item.totalSeedsOk)}</span></td>
+                        <td>${this.escapeHtml(item.backup)}</td>
+                        <td class="notes-cell" title="${this.escapeHtml(item.notes)}">${this.escapeHtml(item.notes)}</td>
+                    </tr>
+                `).join('');
+            }
+
+            renderPagination(currentPage, totalPages, dataManager) {
+                this.elements.pagination.innerHTML = '';
+                
+                if (totalPages <= 1) return;
+                
+                // Previous button
+                const prevBtn = this.createPaginationButton(
+                    '<i class="fas fa-chevron-left"></i>',
+                    'Previous',
+                    currentPage === 1,
+                    () => {
+                        dataManager.currentPage--;
+                        document.dispatchEvent(new CustomEvent('pageChanged'));
+                    }
+                );
+                this.elements.pagination.appendChild(prevBtn);
+                
+                // Page numbers
+                const maxVisiblePages = 5;
+                let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+                let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+                
+                if (endPage - startPage + 1 < maxVisiblePages) {
+                    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                }
+                
+                if (startPage > 1) {
+                    this.elements.pagination.appendChild(this.createPaginationButton('1', '1', false, () => {
+                        dataManager.currentPage = 1;
+                        document.dispatchEvent(new CustomEvent('pageChanged'));
+                    }));
+                    
+                    if (startPage > 2) {
+                        this.elements.pagination.appendChild(this.createPaginationButton('...', 'More', true));
+                    }
+                }
+                
+                for (let i = startPage; i <= endPage; i++) {
+                    const btn = this.createPaginationButton(
+                        i.toString(),
+                        i.toString(),
+                        i === currentPage,
+                        () => {
+                            dataManager.currentPage = i;
+                            document.dispatchEvent(new CustomEvent('pageChanged'));
+                        }
+                    );
+                    this.elements.pagination.appendChild(btn);
+                }
+                
+                if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) {
+                        this.elements.pagination.appendChild(this.createPaginationButton('...', 'More', true));
+                    }
+                    
+                    this.elements.pagination.appendChild(this.createPaginationButton(
+                        totalPages.toString(),
+                        totalPages.toString(),
+                        false,
+                        () => {
+                            dataManager.currentPage = totalPages;
+                            document.dispatchEvent(new CustomEvent('pageChanged'));
+                        }
+                    ));
+                }
+                
+                // Next button
+                const nextBtn = this.createPaginationButton(
+                    '<i class="fas fa-chevron-right"></i>',
+                    'Next',
+                    currentPage === totalPages,
+                    () => {
+                        dataManager.currentPage++;
+                        document.dispatchEvent(new CustomEvent('pageChanged'));
+                    }
+                );
+                this.elements.pagination.appendChild(nextBtn);
+                
+                // Page info
+                const info = document.createElement('span');
+                info.className = 'pagination-info';
+                info.textContent = `Page ${currentPage} of ${totalPages}`;
+                this.elements.pagination.appendChild(info);
+            }
+
+            createPaginationButton(html, title, isDisabled, onClick) {
+                const btn = document.createElement('button');
+                btn.innerHTML = html;
+                btn.title = title;
+                if (isDisabled) btn.disabled = true;
+                if (typeof onClick === 'function') {
+                    btn.addEventListener('click', onClick);
+                }
+                if (title !== '...' && !isDisabled) {
+                    btn.classList.toggle('active', html === title && !isNaN(html));
+                }
+                return btn;
+            }
+
+            updateStats(stats) {
+                this.elements.statsText.textContent = 
+                    `Showing ${stats.start} to ${stats.end} of ${stats.total} entries`;
+            }
+
+            showLoading(show) {
+                this.elements.loading.classList.toggle('active', show);
+            }
+
+            updateSortIcons(column, direction) {
+                document.querySelectorAll('th.sortable').forEach(th => {
+                    const icon = th.querySelector('i');
+                    if (th.dataset.sort === column) {
+                        th.classList.add(direction === 'asc' ? 'sort-asc' : 'sort-desc');
+                        icon.className = direction === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
+                    } else {
+                        th.classList.remove('sort-asc', 'sort-desc');
+                        icon.className = 'fas fa-sort';
+                    }
+                });
+            }
+
+            escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            debounce(func, wait) {
+                return (...args) => {
+                    clearTimeout(this.debounceTimeout);
+                    this.debounceTimeout = setTimeout(() => func.apply(this, args), wait);
+                };
+            }
+
+            getFilters() {
+                return {
+                    search: this.elements.searchInput.value.trim(),
+                    entity: this.elements.entityFilter.value,
+                    status: this.elements.statusFilter.value,
+                    platform: this.elements.platformFilter.value,
+                    localExternal: this.elements.localFilter.value,
+                    team: this.elements.teamFilter.value
+                };
+            }
+
+            resetFilters() {
+                this.elements.searchInput.value = '';
+                this.elements.entityFilter.value = '';
+                this.elements.statusFilter.value = '';
+                this.elements.platformFilter.value = '';
+                this.elements.localFilter.value = '';
+                this.elements.teamFilter.value = '';
+            }
+        }
+
+        // Export functionality
+        class ExportManager {
+            static toCSV(data, filename = 'ecmw-data.csv') {
+                if (!data.length) {
+                    alert('No data to export');
+                    return;
+                }
+
+                const headers = Object.keys(data[0]);
+                const csvContent = [
+                    headers.join(','),
+                    ...data.map(row => headers.map(header => {
+                        const cell = row[header] || '';
+                        return `"${cell.toString().replace(/"/g, '""')}"`;
+                    }).join(','))
+                ].join('\n');
+
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                
+                link.setAttribute('href', url);
+                link.setAttribute('download', filename);
+                link.style.visibility = 'hidden';
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        // Main Application
+        class ECMWApp {
+            constructor() {
+                this.dataManager = new DataManager(sampleData);
+                this.ui = new UIManager();
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.refreshUI();
+            }
+
+            setupEventListeners() {
+                // Debounced search
+                this.ui.elements.searchInput.addEventListener('input', 
+                    this.ui.debounce(() => this.filterData(), 300)
+                );
+
+                // Filter changes
+                ['entityFilter', 'statusFilter', 'platformFilter', 'localFilter', 'teamFilter'].forEach(id => {
+                    this.ui.elements[id].addEventListener('change', () => this.filterData());
+                });
+
+                // Reset filters
+                this.ui.elements.resetFiltersBtn.addEventListener('click', () => {
+                    this.ui.resetFilters();
+                    this.filterData();
+                });
+
+                // Export data
+                this.ui.elements.exportBtn.addEventListener('click', () => {
+                    ExportManager.toCSV(this.dataManager.filteredData);
+                });
+
+                // Custom events
+                document.addEventListener('sortRequested', (e) => {
+                    this.dataManager.sort(e.detail);
+                    this.ui.updateSortIcons(e.detail, this.dataManager.currentSort.direction);
+                    this.refreshUI();
+                });
+
+                document.addEventListener('pageChanged', () => {
+                    this.refreshUI();
+                });
+            }
+
+            filterData() {
+                this.ui.showLoading(true);
+                
+                setTimeout(() => {
+                    const filters = this.ui.getFilters();
+                    this.dataManager.applyFilters(filters);
+                    this.ui.showLoading(false);
+                    this.refreshUI();
+                }, 50);
+            }
+
+            refreshUI() {
+                const paginatedData = this.dataManager.getPaginatedData();
+                const totalPages = this.dataManager.getTotalPages();
+                const stats = this.dataManager.getStats();
+
+                this.ui.renderTable(paginatedData);
+                this.ui.renderPagination(this.dataManager.currentPage, totalPages, this.dataManager);
+                this.ui.updateStats(stats);
+            }
+        }
+
+        // Sample data (same as before)
         const sampleData = [
+            // Your sample data here (same as before)
+            // I've excluded it for brevity but it should be the same array as in your original code
             {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"A","localExternal":"External","pack":"Pack1","dataSeeds":"oui","server":"194.163.144.27","disk":"externe","rdps":"repo","password":"LABO@0000","interval":"1-3999","browser":"Chrome","status":"Repoting","countProfiles":"3999","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"A","localExternal":"External","pack":"Pack2","dataSeeds":"oui","server":"185.216.75.117 ","disk":"externe","rdps":"repo","password":"LABO@0000","interval":"1-5000","browser":"Chrome","status":"Repo IPs","countProfiles":"5000","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"A","localExternal":"External","pack":"Pack3","dataSeeds":"non","server":"66.94.120.85","disk":"externe","rdps":"repo","password":"LABO@0000","interval":"1-3078","browser":"Chrome","status":"Repo IPs","countProfiles":"3078","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"A","localExternal":"External","pack":"Pack4","dataSeeds":"oui","server":"194.163.130.102","disk":"externe","rdps":"repo","password":"LABO@0000","interval":"1-3000","browser":"Chrome","status":"Repoting","countProfiles":"3000","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack5","dataSeeds":"non","server":"4","disk":"E","rdps":"ECM4_Gmail_1","password":"Password@1.","interval":"1-5000","browser":"Chrome","status":"Repoting","countProfiles":"3746","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack6","dataSeeds":"non","server":"4","disk":"E","rdps":"ECM4_Gmail_2","password":"Password@2.","interval":"5001-10000","browser":"Chrome","status":"Verification","countProfiles":"3791","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack7","dataSeeds":"non","server":"4","disk":"E","rdps":"ECM4_Gmail_3","password":"Password@3.","interval":"10001-15000","browser":"Chrome","status":"Repo IPs","countProfiles":"3428","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack8","dataSeeds":"non","server":"3","disk":"G","rdps":"ECM4_Gmail_1","password":"Password@1.","interval":"15001-20000","browser":"Chrome","status":"Repoting","countProfiles":"2560","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack9","dataSeeds":"non","server":"3","disk":"G","rdps":"ECM4_Gmail_2","password":"Password@2.","interval":"20001-25000","browser":"Chrome","status":"Repo IPs","countProfiles":"3025","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack10","dataSeeds":"non","server":"4","disk":"F","rdps":"ECM4_Gmail_4","password":"Password@4.","interval":"28793-30391","browser":"Chromium","status":"ADD contact","countProfiles":"774","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack11","dataSeeds":"non","server":"7","disk":"H","rdps":"ECM4_Gmail_1","password":"tHp**DHpQK7g","interval":"31152-37181","browser":"webview","status":"Repoting","countProfiles":"4251","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack12","dataSeeds":"non","server":"7","disk":"F","rdps":"ECM4_Gmail_2","password":"(DC%c(D#V5f*","interval":"37182-39179","browser":"webview","status":"Verification","countProfiles":"552","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack13","dataSeeds":"non","server":"3","disk":"I","rdps":"ECM4_gmail_5","password":"Password@5.","interval":"40000-42000","browser":"webview","status":"Repoting","countProfiles":"1989","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack14","dataSeeds":"non","server":"144.126.130.165","disk":"externe","rdps":"repo4","password":"ECM4@6666","interval":"85--1782","browser":"palemoon","status":"Repo IPs","countProfiles":"1711","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack15","dataSeeds":"non","server":"194.163.144.27","disk":"externe","rdps":"repo1","password":"ECM4@6666","interval":"3--13753","browser":"palemoon","status":"Repo IPs","countProfiles":"1914","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack16","dataSeeds":"oui","server":"144.126.130.165","disk":"externe","rdps":"repo1","password":"ECM4@6666","interval":"1576--10195","browser":"palemoon","status":"Repo IPs","countProfiles":"1711","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack17","dataSeeds":"oui","server":"144.126.129.103","disk":"externe","rdps":"repo1","password":"ECM4@6666","interval":"1--12655","browser":"palemoon","status":"Repo IPs","countProfiles":"2332","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack19","dataSeeds":"oui","server":"144.126.130.165","disk":"externe","rdps":"repo3","password":"ECM4@6666","interval":"10196---31398","browser":"palemoon","status":"ADD contact","countProfiles":"1711","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack20","dataSeeds":"non","server":"144.126.129.103","disk":"externe","rdps":"repo3","password":"ECM4@6666","interval":"27---5084","browser":"palemoon","status":"Repoting","countProfiles":"917","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack21","dataSeeds":"oui","server":"144.126.130.165","disk":"externe","rdps":"repo1","password":"ECM4@6666","interval":"13083---33587","browser":"palemoon","status":"Repo IPs","countProfiles":"1713","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM5","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack23","dataSeeds":"oui","server":"4","disk":"D","rdps":"ECM5_gmail_1","password":"Njs-.","interval":":pg,rb6Xyw5LW49/","browser":"1-5000","status":"Chrome","countProfiles":"Repoting","totalSeedsOk":"3895","backup":"Non","notes":""},
-    {"entity":"ECM7","entityProd":"ECM5","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack24","dataSeeds":"oui","server":"3","disk":"G","rdps":"ECM5_gmail_1","password":"Password@1.","interval":"15001_20000","browser":"Chrome","status":"Repoting","countProfiles":"4016","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM5","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack25","dataSeeds":"oui","server":"6","disk":"G","rdps":"ECM5_gmail_1","password":"Password@1.","interval":"35001--40000","browser":"Chrome","status":"Repoting","countProfiles":"2911","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM5","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack26","dataSeeds":"oui","server":"4","disk":"D","rdps":"ECM5_gmail_2","password":"Njs-.","interval":":pg,rb6Xyw5LW49/","browser":"5001-10000","status":"Chrome","countProfiles":"Repoting","totalSeedsOk":"2780","backup":"Non","notes":""},
-    {"entity":"ECM7","entityProd":"ECM5","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack27","dataSeeds":"oui","server":"3","disk":"H","rdps":"ECM5_gmail_2","password":"Password@2.","interval":"20001--25000","browser":"Chrome","status":"Repoting","countProfiles":"2296","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM5","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack28","dataSeeds":"oui","server":"6","disk":"G","rdps":"ECM5_gmail_2","password":"Password@2.","interval":"40001-45000","browser":"Chrome","status":"Repoting","countProfiles":"2990","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM5","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack29","dataSeeds":"oui","server":"3","disk":"I","rdps":"ECM5_gmail_3","password":"Password@3.","interval":"25001--30000","browser":"Chrome","status":"Repoting","countProfiles":"3090","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM5","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack30","dataSeeds":"oui","server":"6","disk":"G","rdps":"ECM5_gmail_3","password":"Password@3.","interval":"45001-50000","browser":"Chrome","status":"Repoting","countProfiles":"2797","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM5","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack31","dataSeeds":"oui","server":"4","disk":"F","rdps":"ECM5_gmail_3","password":"Njs-.","interval":":pg,rb6Xyw5LW49/","browser":"10001-15000","status":"webview","countProfiles":"Repoting","totalSeedsOk":"3114","backup":"Non","notes":""},
-    {"entity":"ECM7","entityProd":"ECM5","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack32","dataSeeds":"non","server":"3","disk":"I","rdps":"ECM5_gmail_4_","password":"Password@4.","interval":"30001-35000","browser":"Chrome","status":"ADD contact","countProfiles":"3269","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM5","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack33","dataSeeds":"oui","server":"6","disk":"G","rdps":"ECM5_gmail_4","password":"Password@4.","interval":"50001-55000","browser":"Chrome","status":"Repoting","countProfiles":"2163","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM5","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack34","dataSeeds":"oui","server":"4","disk":"F","rdps":"ECM5_gmail_4","password":"Password@4.","interval":"60001-65000","browser":"Chromium","status":"Repoting","countProfiles":"1439","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM5","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack35","dataSeeds":"oui","server":"6","disk":"F","rdps":"ECM5_gmail_5","password":"Password@5.","interval":"55001-60000","browser":"Chrome","status":"Repoting","countProfiles":"1633","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack36","dataSeeds":"non","server":"4","disk":"D","rdps":"ECM7_gmail_1","password":"Password@1.","interval":"1-5000","browser":"Chrome","status":"Repoting","countProfiles":"3241","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack37","dataSeeds":"non","server":"3","disk":"H","rdps":"ECM7_gmail_1","password":"Password@1.","interval":"25001--30000","browser":"Chrome","status":"Repoting","countProfiles":"3530","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack38","dataSeeds":"non","server":"6","disk":"F","rdps":"ECM7_gmail_1","password":"Password@1.","interval":"35001--40000","browser":"Chrome","status":"Repoting","countProfiles":"3800","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack39","dataSeeds":"non","server":"3","disk":"H","rdps":"ECM7_gmail_2","password":"Password@2.","interval":"30001--35000","browser":"Chrome","status":"Repoting","countProfiles":"3427","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack40","dataSeeds":"non","server":"4","disk":"F","rdps":"ECM7_gmail_2","password":"Password@2.","interval":"5001--10000","browser":"Chrome","status":"Repoting","countProfiles":"1733","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack41","dataSeeds":"oui","server":"6","disk":"F","rdps":"ECM7_gmail_2","password":"Password@2.","interval":"40001-45000","browser":"Chrome","status":"Repoting","countProfiles":"2588","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack42","dataSeeds":"non","server":"4","disk":"D","rdps":"ECM7_gmail_3","password":"Password@3.","interval":"10001-15000","browser":"Chrome","status":"EMPTY","countProfiles":"2993","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack43","dataSeeds":"non","server":"4","disk":"D","rdps":"ECM7_gmail_4","password":"Password@4.","interval":"15001-20000","browser":"Chrome","status":"Repoting","countProfiles":"3270","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack44","dataSeeds":"non","server":"4","disk":"F","rdps":"ECM7_gmail_5","password":"Password@5.","interval":"20001-25000","browser":"webview","status":"Repoting","countProfiles":"1148","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM3","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack45","dataSeeds":"non","server":"1","disk":"D","rdps":"ecm3_gmail_1","password":"Password@1.","interval":"1-5000","browser":"Chrome","status":"Repoting","countProfiles":"2969","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM3","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack46","dataSeeds":"non","server":"1","disk":"D","rdps":"ecm3_gmail_2","password":"Password@2.","interval":"5001-10000","browser":"Chrome","status":"Repoting","countProfiles":"2949","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM3","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack47","dataSeeds":"non","server":"1","disk":"D","rdps":"ecm3_gmail_3","password":"Password@3.","interval":"10001-15000","browser":"Chrome","status":"ADD contact","countProfiles":"3397","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM3","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack48","dataSeeds":"non","server":"1","disk":"E","rdps":"ecm3_gmail_4","password":"Password@4.","interval":"15001-20000","browser":"Chrome","status":"ADD contact","countProfiles":"3067","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM3","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack49","dataSeeds":"oui","server":"1","disk":"E","rdps":"ecm3_gmail_5","password":"Password@5.","interval":"20001-25000","browser":"Chrome","status":"Repoting","countProfiles":"2047","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM3","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack50","dataSeeds":"oui","server":"1","disk":"E","rdps":"ecm3_gmail_6","password":"Password@6.","interval":"25001-30000","browser":"Chrome","status":"Repoting","countProfiles":"4425","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM3","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack51","dataSeeds":"oui","server":"1","disk":"F","rdps":"ecm3_gmail_7","password":"Password@7.","interval":"30001-35000","browser":"Chrome","status":"ADD contact","countProfiles":"4102","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM3","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack52","dataSeeds":"oui","server":"1","disk":"F","rdps":"ecm3_gmail_8","password":"Password@8.","interval":"35001-40000","browser":"Chrome","status":"ADD contact","countProfiles":"2983","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM3","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack53","dataSeeds":"oui","server":"1","disk":"F","rdps":"ecm3_gmail_9","password":"Password@9.","interval":"40001-45000","browser":"Chrome","status":"ADD contact","countProfiles":"1655","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM3","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack54","dataSeeds":"oui","server":"1","disk":"G","rdps":"ecm3_gmail_10","password":"Password@10.","interval":"45001-50000","browser":"Chrome","status":"ADD contact","countProfiles":"3047","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7_B","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack55","dataSeeds":"oui","server":"2","disk":"STK1","rdps":"ECM2_repo1","password":"dapz~&D)(5","interval":"'%gM=$S<xVQ","browser":"1-25000","status":"Chrome","countProfiles":"ADD contact","totalSeedsOk":"16112","backup":"Non","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7_B","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack56","dataSeeds":"oui","server":"6","disk":"I","rdps":"ecm2_gmail9","password":"Password@9.","interval":"65602 - 70601","browser":"Chrome","status":"ADD contact","countProfiles":"4763","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7_B","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack57","dataSeeds":"oui","server":"6","disk":"E","rdps":"ecm2_gmail10","password":"Password@10.","interval":"70602 - 75601","browser":"Chrome","status":"Verification","countProfiles":"3900","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7_B","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack58","dataSeeds":"non","server":"6","disk":"I","rdps":"ecm2_gmail_11","password":"Password@11.","interval":"75602 - 80601","browser":"Chrome","status":"Verification","countProfiles":"4089","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM3-Verif","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack59","dataSeeds":"non","server":"3","disk":"D","rdps":"ecm3_gmail_5","password":"Password@5.","interval":"1-100000","browser":"Chromium","status":"Verification","countProfiles":"18640","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7_B","platform":"ECM_APP","team":"C","localExternal":"Local","pack":"Pack60","dataSeeds":"non","server":"6","disk":"I","rdps":"ecm2_gmail4","password":"Password@4.","interval":"40602-45601","browser":"Chrome","status":"Repoting","countProfiles":"4561","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM3","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack61","dataSeeds":"non","server":"1","disk":"I","rdps":"ecm3_gmail_11","password":"Password@11.","interval":"50001-55000","browser":"webview","status":"EMPTY","countProfiles":"2697","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM3","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack62","dataSeeds":"non","server":"1","disk":"I","rdps":"ecm3_gmail_12","password":"Password@12.","interval":"55001-60000","browser":"webview","status":"Repoting","countProfiles":"3187","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM3","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack63","dataSeeds":"non","server":"1","disk":"I","rdps":"ecm3_gmail_13","password":"Password@13.","interval":"60001-65000","browser":"webview","status":"EMPTY","countProfiles":"3234","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM3","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack64","dataSeeds":"non","server":"1","disk":"I","rdps":"ecm3_gmail_14","password":"Password@14.","interval":"65001-70000","browser":"webview","status":"Repoting","countProfiles":"3223","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM3","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack65","dataSeeds":"non","server":"1","disk":"I","rdps":"ecm3_gmail_15","password":"Password@15.","interval":"70001-74999","browser":"webview","status":"Repoting","countProfiles":"3149","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack66","dataSeeds":"non","server":"7","disk":"F","rdps":"ECM7_Gmail_1","password":"p4P8BoiAdyIy","interval":"45002_50000","browser":"webview","status":"Verification","countProfiles":"2725","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"C","localExternal":"Local","pack":"Pack67","dataSeeds":"non","server":"7","disk":"H","rdps":"ECM7_Gmail_2","password":"Fqqrm$kehX^5","interval":"50001_55999","browser":"webview","status":"Repoting","countProfiles":"3431","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack71","dataSeeds":"oui","server":"207.244.243.33","disk":"externe","rdps":"repo1","password":"ECM5@0000","interval":"1--23573","browser":"palemoon","status":"Repoting","countProfiles":"1861","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack72","dataSeeds":"oui","server":"207.244.243.33","disk":"externe","rdps":"repo2","password":"ECM5@0000","interval":"1--23573","browser":"palemoon","status":"Repoting","countProfiles":"1861","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack73","dataSeeds":"non","server":"66.94.123.3","disk":"externe","rdps":"repo1","password":"ECM5@0000","interval":"1--24505","browser":"palemoon","status":"Repoting","countProfiles":"1319","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"C","localExternal":"Local","pack":"Pack74","dataSeeds":"non","server":"1","disk":"I","rdps":"ECM7_Gmail_1","password":"%^yyB6S&c3/w","interval":"57000-57903","browser":"Chromium","status":"ADD contact","countProfiles":"904","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack75","dataSeeds":"oui","server":"144.91.119.93","disk":"externe","rdps":"repo1","password":"ECM5@0000","interval":"1--40125","browser":"palemoon","status":"Repoting","countProfiles":"4320","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack76","dataSeeds":"oui","server":"144.91.119.93","disk":"externe","rdps":"repo2","password":"ECM5@0000","interval":"1--40125","browser":"palemoon","status":"Repoting","countProfiles":"4320","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"iMACROS","team":"C","localExternal":"External","pack":"Pack77","dataSeeds":"oui","server":"194.163.145.187","disk":"externe","rdps":"ecm2","password":"A5quII%Tfq","interval":"\"AA1-AA4000-BB1-BB4000\"","browser":"palemoon","status":"Reporting Offer","countProfiles":"2924","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"C","localExternal":"Local","pack":"Pack78","dataSeeds":"non","server":"4","disk":"F","rdps":"ECM7_Gmail_6","password":"Password@6.","interval":"58788-60503","browser":"Chromium","status":"Repoting","countProfiles":"1716","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"iMACROS","team":"C","localExternal":"External","pack":"Pack79","dataSeeds":"non","server":"194.163.145.187","disk":"externe","rdps":"user2","password":"A5quII%Tfq","interval":"\"AA1-AA4000-BB1-BB4000\"","browser":"palemoon","status":"EMPTY","countProfiles":"1896","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"ECM_APP","team":"B","localExternal":"External","pack":"Pack80","dataSeeds":"non","server":"70.36.107.56","disk":"externe","rdps":"admin","password":"ECM2_uC84","interval":"1---6000","browser":"Chrome","status":"ADD contact","countProfiles":"5751","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack81","dataSeeds":"oui","server":"6","disk":"D","rdps":"ECM2_gmail1","password":"Password@1.","interval":"25001--30107","browser":"Chrome","status":"Verification","countProfiles":"4040","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack82","dataSeeds":"oui","server":"6","disk":"E","rdps":"ECM2_gmail2","password":"Password@2.","interval":"30108-35601","browser":"Chrome","status":"Repoting","countProfiles":"5096","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack83","dataSeeds":"oui","server":"6","disk":"F","rdps":"ECM2_gmail3","password":"Password@3.","interval":"35602-40601","browser":"Chrome","status":"Verification","countProfiles":"4163","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack84","dataSeeds":"oui","server":"6","disk":"D","rdps":"ECM2_gmail5","password":"Password@5.","interval":"45602-50601","browser":"Chrome","status":"Verification","countProfiles":"4833","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack85","dataSeeds":"oui","server":"6","disk":"E","rdps":"ECM2_gmail6","password":"Password@6.","interval":"50602---55601","browser":"Chrome","status":"Repoting","countProfiles":"4696","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack86","dataSeeds":"non","server":"6","disk":"F","rdps":"ECM2_gmail7","password":"Password@7.","interval":"55602---60601","browser":"Chrome","status":"Verification","countProfiles":"3733","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack87","dataSeeds":"non","server":"6","disk":"G","rdps":"ECM2_gmail8","password":"Password@8.","interval":"60602---65601","browser":"Chrome","status":"Repoting","countProfiles":"4135","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack88","dataSeeds":"non","server":"6","disk":"H","rdps":"ECM2_gmail_12","password":"Password@12.","interval":"80602---85601","browser":"Chrome","status":"Repoting","countProfiles":"4233","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM10","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack89","dataSeeds":"non","server":"7","disk":"F","rdps":"ECM10_Gmail_1","password":"zeHHUN5#pmb@","interval":"1-5000","browser":"webview","status":"Repoting","countProfiles":"3976","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM10","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack90","dataSeeds":"non","server":"7","disk":"F","rdps":"ECM10_Gmail_2","password":"CFHaSZnCeEu*","interval":"5001-9306","browser":"webview","status":"ADD contact","countProfiles":"2523","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"iMACROS","team":"B","localExternal":"External","pack":"Pack91","dataSeeds":"oui","server":"5.39.222.70","disk":"externe","rdps":"ecm2","password":"dYZN6qH2&Y","interval":"\"AA1-AA4000-BB1-BB4000\"","browser":"palemoon","status":"Repoting","countProfiles":"2910","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"iMACROS","team":"B","localExternal":"External","pack":"Pack92","dataSeeds":"oui","server":"5.39.222.70","disk":"externe","rdps":"user1","password":"dYZN6qH2&Y","interval":"\"AA1-AA4000-BB1-BB4000\"","browser":"palemoon","status":"Repoting","countProfiles":"2916","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"iMACROS","team":"B","localExternal":"External","pack":"Pack93","dataSeeds":"oui","server":"5.39.222.70","disk":"externe","rdps":"user2","password":"dYZN6qH2&Y","interval":"\"AA1-AA4000-BB1-BB4000\"","browser":"palemoon","status":"Repoting","countProfiles":"2001","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"iMACROS","team":"B","localExternal":"External","pack":"Pack94","dataSeeds":"oui","server":"185.193.66.147","disk":"externe","rdps":"ecm2","password":"ob!PU8mr1s","interval":"\"AA1-AA4000-BB1-BB4000\"","browser":"palemoon","status":"Verification","countProfiles":"5797","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"iMACROS","team":"B","localExternal":"External","pack":"Pack95","dataSeeds":"oui","server":"185.193.66.147","disk":"externe","rdps":"user1","password":"ob!PU8mr1s","interval":"\"AA1-AA4000-BB1-BB4000\"","browser":"palemoon","status":"Verification","countProfiles":"2878","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"iMACROS","team":"B","localExternal":"External","pack":"Pack96","dataSeeds":"non","server":"154.53.51.40","disk":"externe","rdps":"ecm2","password":"Ta8iNl&xcd","interval":"\"AA1-AA4000-BB1-BB4000\"","browser":"palemoon","status":"ADD contact","countProfiles":"5487","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"iMACROS","team":"B","localExternal":"External","pack":"Pack97","dataSeeds":"non","server":"154.53.51.40","disk":"externe","rdps":"abderrahim","password":"Ta8iNl&xcd","interval":"\"AA1-AA4000-BB1-BB4000\"","browser":"palemoon","status":"ADD contact","countProfiles":"5578","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM6","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack98","dataSeeds":"non","server":"178.18.246.248","disk":"externe","rdps":"admin","password":"ECM6@dc45f6","interval":"\"C1-C4000-F1-F4000\"","browser":"palemoon","status":"Repoting","countProfiles":"7200","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM6","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack99","dataSeeds":"non","server":"178.18.246.248","disk":"externe","rdps":"user1","password":"ecm6@123","interval":"\"C1-C4000-F1-F4000\"","browser":"palemoon","status":"Repoting","countProfiles":"3600","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM6","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack100","dataSeeds":"oui","server":"178.18.246.247","disk":"externe","rdps":"admin","password":"ECM6@bv67n8","interval":"\"C1-C4000-F1-F4000\"","browser":"palemoon","status":"DOWN","countProfiles":"","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM6","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack101","dataSeeds":"non","server":"178.18.246.247","disk":"externe","rdps":"user1","password":"ecm6@123","interval":"\"C1-C4000-F1-F4000\"","browser":"palemoon","status":"DOWN","countProfiles":"","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM6","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack102","dataSeeds":"non","server":"178.18.246.245","disk":"externe","rdps":"admin","password":"ECM6@fgv1q2sE","interval":"\"C1-C4000-F1-F4000\"","browser":"palemoon","status":"DOWN","countProfiles":"","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM6","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack103","dataSeeds":"non","server":"178.18.246.245","disk":"externe","rdps":"user1","password":"ecm6@123","interval":"\"C1-C4000-F1-F4000\"","browser":"palemoon","status":"DOWN","countProfiles":"","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM6","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack104","dataSeeds":"non","server":"178.18.246.243","disk":"externe","rdps":"admin","password":"ECM6@l98kJ","interval":"\"C1-C4000-F1-F4000\"","browser":"palemoon","status":"Verification","countProfiles":"7200","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM6","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack105","dataSeeds":"non","server":"178.18.246.243","disk":"externe","rdps":"user1","password":"ecm6@123","interval":"\"C1-C4000-F1-F4000\"","browser":"palemoon","status":"Repoting","countProfiles":"3600","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM6","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack106","dataSeeds":"non","server":"161.97.158.158","disk":"externe","rdps":"admin","password":"ECM6@gb56gE","interval":"\"C1-C4000-F1-F4000\"","browser":"palemoon","status":"Repoting","countProfiles":"7200","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM6","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack107","dataSeeds":"non","server":"161.97.158.158","disk":"externe","rdps":"user1","password":"ecm6@123","interval":"\"C1-C4000-F1-F4000\"","browser":"palemoon","status":"Repoting","countProfiles":"3600","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM6","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack108","dataSeeds":"oui","server":"161.97.145.244","disk":"externe","rdps":"admin","password":"ECM6@aq389dD","interval":"\"C1-C4000-F1-F4000\"","browser":"palemoon","status":"Repoting","countProfiles":"7200","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM6","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack109","dataSeeds":"non","server":"161.97.145.244","disk":"externe","rdps":"user1","password":"ecm6@123","interval":"\"C1-C4000-F1-F4000\"","browser":"palemoon","status":"Repoting","countProfiles":"3600","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"iMACROS","team":"A","localExternal":"External","pack":"Pack110","dataSeeds":"non","server":"66.94.123.3","disk":"externe","rdps":"testv","password":"mailer@4899","interval":"1---5000","browser":"palemoon","status":"Repoting","countProfiles":"1320","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"iMACROS","team":"A","localExternal":"Local","pack":"Pack111","dataSeeds":"non","server":"6","disk":"F","rdps":"ecm7_gmail_4","password":"Password@4.","interval":"1---5000","browser":"palemoon","status":"Repoting","countProfiles":"689","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack112","dataSeeds":"non","server":"6","disk":"H","rdps":"ecm2_gmail_14","password":"Password@14.","interval":"90602 - 95601","browser":"Chrome","status":"EMPTY","countProfiles":"4332","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack113","dataSeeds":"non","server":"6","disk":"H","rdps":"ecm2_gmail_15","password":"Password@15.","interval":"95602 - 100601","browser":"Chrome","status":"EMPTY","countProfiles":"4199","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack114","dataSeeds":"non","server":"6","disk":"D","rdps":"ecm2_gmail_16","password":"Password@16.","interval":"100602 - 105601","browser":"Chrome","status":"EMPTY","countProfiles":"4399","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"ECM_APP","team":"B","localExternal":"Local","pack":"Pack115","dataSeeds":"non","server":"6","disk":"H","rdps":"ecm2_gmail_13","password":"Password@13.","interval":"85602 - 90601","browser":"Chrome","status":"EMPTY","countProfiles":"4306","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack116","dataSeeds":"non","server":"7","disk":"H","rdps":"ECM7_Gmail_3","password":"s8^XqcxhX)a^","interval":"56000-56999","browser":"webview","status":"ADD contact","countProfiles":"794","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack117","dataSeeds":"non","server":"7","disk":"F","rdps":"ECM7_Gmail_4","password":"czmIMvXPYr58","interval":"57904-58787","browser":"Chromium","status":"Repoting","countProfiles":"827","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack118","dataSeeds":"non","server":"7","disk":"H","rdps":"ECM4_Gmail_3","password":")5&MV1y65GMx","interval":"41606-45000","browser":"webview","status":"Verification","countProfiles":"2918","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack119","dataSeeds":"non","server":"1","disk":"E","rdps":"ECM4_Gmail_1","password":"","interval":"49380--50268","browser":"Brave","status":"Verification","countProfiles":"889","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack120","dataSeeds":"non","server":"1","disk":"I","rdps":"ECM7_Gmail_2","password":"#+YjnWBQD{@?","interval":"65502-----66127","browser":"Brave","status":"LOGING","countProfiles":"626","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM2","platform":"ECM_APP","team":"Empty","localExternal":"Local","pack":"Pack121","dataSeeds":"non","server":"3","disk":"H","rdps":"ECM10_Gmail_3","password":"zX3v@(YAwdaC","interval":"105611---110617","browser":"Brave","status":"Verification","countProfiles":"5007","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack122","dataSeeds":"non","server":"3","disk":"I","rdps":"ecm4_gmail_6","password":"Password@6.","interval":"45002---49379","browser":"Brave","status":"Verification","countProfiles":"4378","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM3","platform":"ECM_APP","team":"Empty","localExternal":"Local","pack":"Pack123","dataSeeds":"non","server":"1","disk":"I","rdps":"ecm3_gmail_16","password":"Password@16.","interval":"75000---79999","browser":"Brave","status":"Hold","countProfiles":"5000","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM10","platform":"ECM_APP","team":"Empty","localExternal":"Local","pack":"Pack124","dataSeeds":"non","server":"7","disk":"I","rdps":"ECM10_Gmail_3","password":"qAyNd(uL7bZ8","interval":"9307-11494","browser":"Brave","status":"LOGING","countProfiles":"891","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"Empty","localExternal":"Local","pack":"Pack125","dataSeeds":"non","server":"3","disk":"G","rdps":"ecm7_gmail_8","password":"Password@8.","interval":"60504-63501","browser":"Brave","status":"Hold","countProfiles":"2998","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"Empty","localExternal":"Local","pack":"Pack126","dataSeeds":"non","server":"3","disk":"H","rdps":"ecm7_gmail_7","password":"Password@7.","interval":"63502-65501","browser":"Brave","status":"Hold","countProfiles":"2000","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"A","localExternal":"Local","pack":"Pack127","dataSeeds":"non","server":"1","disk":"I","rdps":"ECM4_Gmail_2","password":"u[iRz{4.?sJ9","interval":"","browser":"webview","status":"LOGING","countProfiles":"444","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"Empty","localExternal":"Local","pack":"Pack128","dataSeeds":"non","server":"1","disk":"I","rdps":"ECM7_Gmail_3","password":"Rx>/mN3*#RIt","interval":"66128-66597","browser":"webview","status":"LOGING","countProfiles":"447","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM4","entityProd":"ECM4","platform":"ECM_APP","team":"Empty","localExternal":"Local","pack":"Pack129","dataSeeds":"non","server":"7","disk":"I","rdps":"ECM4_Gmail_4","password":"hV3qFvZt9LPs","interval":"50739-51741","browser":"Brave","status":"LOGING","countProfiles":"","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM7","entityProd":"ECM7","platform":"ECM_APP","team":"Empty","localExternal":"Local","pack":"Pack130","dataSeeds":"non","server":"7","disk":"I","rdps":"ECM7_Gmail_5","password":"PzfPoTxTCM7P","interval":"66598-69176","browser":"Brave","status":"LOGING","countProfiles":"","totalSeedsOk":"Non","backup":"","notes":""},
-    {"entity":"ECM10","entityProd":"ECM10","platform":"ECM_APP","team":"Empty","localExternal":"Local","pack":"Pack131","dataSeeds":"non","server":"7","disk":"I","rdps":"ECM10_Gmail_4","password":"N(PF7UsCT9P7","interval":"13495-14495","browser":"Brave","status":"LOGING","countProfiles":"","totalSeedsOk":"Non","backup":"","notes":""},
-            // Additional data rows would continue here...
-            // For brevity, I've included a subset of your data
+            // ... rest of your data
         ];
 
-        // Global variables
-        let currentData = [...sampleData];
-        let currentSort = { column: null, direction: 'asc' };
-        let currentPage = 1;
-        const rowsPerPage = 10;
-
-        // DOM elements
-        const dataBody = document.getElementById('dataBody');
-        const searchInput = document.getElementById('searchInput');
-        const entityFilter = document.getElementById('entityFilter');
-        const localFilter = document.getElementById('localFilter');
-        const statusFilter = document.getElementById('statusFilter');
-        const platformFilter = document.getElementById('platformFilter');
-        const resetFiltersBtn = document.getElementById('resetFilters');
-        const exportBtn = document.getElementById('exportBtn');
-        const paginationElement = document.getElementById('pagination');
-        const statsText = document.getElementById('statsText');
-
-        // Initialize the application
-        function init() {
-            renderTable();
-            setupEventListeners();
-            updatePagination();
-            updateStats();
-        }
-
-        // Render the table with current data
-        function renderTable() {
-            dataBody.innerHTML = '';
-            
-            // Calculate pagination
-            const startIndex = (currentPage - 1) * rowsPerPage;
-            const endIndex = startIndex + rowsPerPage;
-            const paginatedData = currentData.slice(startIndex, endIndex);
-            
-            if (paginatedData.length === 0) {
-                dataBody.innerHTML = '<tr><td colspan="26" style="text-align: center;">No data found</td></tr>';
-                return;
-            }
-            
-            paginatedData.forEach(item => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${item.entity}</td>
-                    <td>${item.entityProd}</td>
-                    <td>${item.platform}</td>
-                    <td>${item.team}</td>
-                    <td><span class="badge ${item.localExternal === 'Local' ? 'badge-local' : 'badge-external'}">${item.localExternal}</span></td>
-                    <td>${item.pack}</td>
-                    <td><span class="badge ${item.dataSeeds === 'oui' ? 'badge-oui' : 'badge-non'}">${item.dataSeeds}</span></td>
-                    <td>${item.server}</td>
-                    <td>${item.disk}</td>
-                    <td>${item.rdps}</td>
-                    <td>${item.password}</td>
-                    <td>${item.interval}</td>
-                    <td>${item.browser}</td>
-                    <td>${item.status}</td>
-                    <td>${item.countProfiles}</td>
-                    <td>${item.totalSeedsOk}</td>
-                    <td>${item.backup}</td>
-                    <td class="notes-cell">${item.notes}</td>
-                `;
-                dataBody.appendChild(row);
-            });
-        }
-
-        // Set up event listeners
-        function setupEventListeners() {
-            // Search functionality
-            searchInput.addEventListener('input', () => {
-                filterData();
-                currentPage = 1;
-                renderTable();
-                updatePagination();
-                updateStats();
-            });
-            
-            // Filter functionality
-            entityFilter.addEventListener('change', filterData);
-            localFilter.addEventListener('change', filterData);
-            statusFilter.addEventListener('change', filterData);
-            platformFilter.addEventListener('change', filterData);
-            
-            // Reset filters
-            resetFiltersBtn.addEventListener('click', resetFilters);
-            
-            // Export button
-            exportBtn.addEventListener('click', () => {
-                alert('In a real application, this would export the data to CSV or Excel format.');
-            });
-            
-            // Sort functionality
-            document.querySelectorAll('th[data-sort]').forEach(header => {
-                header.addEventListener('click', () => {
-                    const column = header.getAttribute('data-sort');
-                    sortData(column);
-                    renderTable();
-                });
-            });
-        }
-
-        // Filter data based on search and filters
-        function filterData() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const entityValue = entityFilter.value;
-            const statusValue = statusFilter.value;
-            const platformValue = platformFilter.value;
-            const localValue = localFilter.value;
-            
-            currentData = sampleData.filter(item => {
-                return (
-                    (item.entity.toLowerCase().includes(searchTerm) ||
-                     item.entityProd.toLowerCase().includes(searchTerm) ||
-                     item.platform.toLowerCase().includes(searchTerm) ||
-                     item.team.toLowerCase().includes(searchTerm) ||
-                     item.pack.toLowerCase().includes(searchTerm) ||
-                     item.status.toLowerCase().includes(searchTerm)) &&
-                    (entityValue === '' || item.entity === entityValue) &&
-                    (statusValue === '' || item.status === statusValue) &&
-                    (platformValue === '' || item.platform === platformValue) &&
-                    (localValue === '' || item.localExternal === localValue)
-                );
-            });
-            
-            currentPage = 1;
-            renderTable();
-            updatePagination();
-            updateStats();
-        }
-
-        // Reset all filters
-        function resetFilters() {
-            searchInput.value = '';
-            entityFilter.value = '';
-            statusFilter.value = '';
-            platformFilter.value = '';
-            filterData();
-        }
-
-        // Sort data by column
-        function sortData(column) {
-            if (currentSort.column === column) {
-                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
-            } else {
-                currentSort.column = column;
-                currentSort.direction = 'asc';
-            }
-            
-            currentData.sort((a, b) => {
-                let valueA = a[column];
-                let valueB = b[column];
-                
-                // Handle numeric values
-                if (column === 'countProfiles' || column === 'totalSeedsOk' || column === 'dailyConsumption') {
-                    valueA = parseFloat(valueA) || 0;
-                    valueB = parseFloat(valueB) || 0;
-                }
-                
-                if (typeof valueA === 'string') valueA = valueA.toUpperCase();
-                if (typeof valueB === 'string') valueB = valueB.toUpperCase();
-                
-                if (valueA < valueB) return currentSort.direction === 'asc' ? -1 : 1;
-                if (valueA > valueB) return currentSort.direction === 'asc' ? 1 : -1;
-                return 0;
-            });
-        }
-
-        // Update pagination buttons
-        function updatePagination() {
-            const pageCount = Math.ceil(currentData.length / rowsPerPage);
-            paginationElement.innerHTML = '';
-            
-            if (pageCount <= 1) return;
-            
-            // Previous button
-            const prevButton = document.createElement('button');
-            prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
-            prevButton.addEventListener('click', () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    renderTable();
-                    updatePagination();
-                    updateStats();
-                }
-            });
-            paginationElement.appendChild(prevButton);
-            
-            // Page buttons
-            for (let i = 1; i <= pageCount; i++) {
-                const pageButton = document.createElement('button');
-                pageButton.textContent = i;
-                if (i === currentPage) pageButton.classList.add('active');
-                
-                pageButton.addEventListener('click', () => {
-                    currentPage = i;
-                    renderTable();
-                    updatePagination();
-                    updateStats();
-                });
-                
-                paginationElement.appendChild(pageButton);
-            }
-            
-            // Next button
-            const nextButton = document.createElement('button');
-            nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
-            nextButton.addEventListener('click', () => {
-                if (currentPage < pageCount) {
-                    currentPage++;
-                    renderTable();
-                    updatePagination();
-                    updateStats();
-                }
-            });
-            paginationElement.appendChild(nextButton);
-        }
-
-        // Update statistics text
-        function updateStats() {
-            const startIndex = (currentPage - 1) * rowsPerPage + 1;
-            const endIndex = Math.min(currentPage * rowsPerPage, currentData.length);
-            const total = currentData.length;
-            
-            statsText.textContent = `Showing ${startIndex} to ${endIndex} of ${total} entries`;
-        }
-
-        // Initialize the app when the page loads
-        document.addEventListener('DOMContentLoaded', init);
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new ECMWApp();
+        });
     </script>
 </body>
 </html>
