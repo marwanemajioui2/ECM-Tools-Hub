@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Compare, Remove & Highlight Duplicates</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 180px;
+      font-family: monospace;
+      font-size: 14px;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      margin-bottom: 12px;
+    }
+
+    button {
+      padding: 10px 25px;
+      font-size: 15px;
+      cursor: pointer;
+      border: none;
+      background: #2563eb;
+      color: white;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background: #1e4fd8;
+    }
+
+    .actions {
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .summary {
+      background: #f1f5f9;
+      border-left: 5px solid #dc2626;
+      padding: 12px;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .highlight {
+      color: #dc2626;
+      font-weight: bold;
+    }
+
+    .dup-box {
+      background: #fff1f2;
+      border: 1px solid #fecaca;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+      font-family: monospace;
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Compare, Remove & Highlight Duplicates</h1>
+
+  <p><strong>Input A (Main List)</strong></p>
+  <textarea id="inputA" placeholder="value1
+value2
+value3
+value2"></textarea>
+
+  <p><strong>Input B (Comparison List)</strong></p>
+  <textarea id="inputB" placeholder="value2
+value9"></textarea>
+
+  <div class="actions">
+    <button onclick="process()">Compare & Clean</button>
+  </div>
+
+  <p><strong>Cleaned Result (A − B)</strong></p>
+  <textarea id="output" readonly></textarea>
+
+  <div id="summary" class="summary" style="display:none;"></div>
+
+  <h3 id="dupTitle" style="display:none;">Duplicated / Removed Lines</h3>
+  <div id="duplicates" class="dup-box" style="display:none;"></div>
+</div>
+
+<script>
+function process() {
+  const inputA = document.getElementById('inputA').value;
+  const inputB = document.getElementById('inputB').value;
+
+  const listA = inputA
+    .split('\n')
+    .map(v => v.trim())
+    .filter(Boolean);
+
+  const setB = new Set(
+    inputB
+      .split('\n')
+      .map(v => v.trim())
+      .filter(Boolean)
+  );
+
+  const removedMap = {};
+  const cleaned = [];
+
+  listA.forEach(line => {
+    if (setB.has(line)) {
+      removedMap[line] = (removedMap[line] || 0) + 1;
+    } else {
+      cleaned.push(line);
+    }
+  });
+
+  document.getElementById('output').value = cleaned.join('\n');
+
+  const removedTotal = Object.values(removedMap).reduce((a,b) => a + b, 0);
+  const uniqueRemoved = Object.keys(removedMap).length;
+
+  const summaryHTML = `
+    <strong>Summary:</strong><br>
+    Total lines in Input A: <strong>${listA.length}</strong><br>
+    Unique duplicated values:
+    <span class="highlight">${uniqueRemoved}</span><br>
+    Total duplicates removed:
+    <span class="highlight">${removedTotal}</span><br>
+    Lines remaining:
+    <strong>${cleaned.length}</strong>
+  `;
+
+  const summaryDiv = document.getElementById('summary');
+  summaryDiv.innerHTML = summaryHTML;
+  summaryDiv.style.display = 'block';
+
+  const dupDiv = document.getElementById('duplicates');
+  const dupTitle = document.getElementById('dupTitle');
+
+  if (uniqueRemoved > 0) {
+    let dupText = '';
+    for (const [value, count] of Object.entries(removedMap)) {
+      dupText += `${value}  →  ${count} time(s)\n`;
+    }
+    dupDiv.textContent = dupText.trim();
+    dupDiv.style.display = 'block';
+    dupTitle.style.display = 'block';
+  } else {
+    dupDiv.style.display = 'none';
+    dupTitle.style.display = 'none';
+  }
+}
+</script>
+
+</body>
+</html>
