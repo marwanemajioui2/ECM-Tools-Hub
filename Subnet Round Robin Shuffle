@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Subnet Round Robin Shuffle - ECM Limits & Stats</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 1150px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 160px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 14px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+
+    input[type="number"] {
+      width: 90px;
+      padding: 6px;
+      margin-left: 5px;
+    }
+
+    button {
+      padding: 10px 25px;
+      font-size: 15px;
+      cursor: pointer;
+      border: none;
+      background: #2563eb;
+      color: white;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background: #1e4fd8;
+    }
+
+    .actions {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .limits {
+      display: flex;
+      justify-content: space-around;
+      margin: 15px 0;
+      font-weight: bold;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      background: #f1f5f9;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .entity {
+      margin-top: 25px;
+    }
+
+    .count {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Subnet Round Robin Shuffle</h1>
+
+  <p><strong>Input IPs (one per line)</strong></p>
+  <textarea id="input" placeholder="192.168.1.10
+192.168.2.4
+10.0.0.1"></textarea>
+
+  <div class="limits">
+    ECM4:
+    <input type="number" id="limit-ecm4" value="0" min="0">
+
+    ECM7:
+    <input type="number" id="limit-ecm7" value="0" min="0">
+
+    ECM10:
+    <input type="number" id="limit-ecm10" value="0" min="0">
+  </div>
+
+  <div class="actions">
+    <button onclick="shuffleIPs()">Shuffle & Allocate</button>
+  </div>
+
+  <!-- GLOBAL STATS -->
+  <div class="stats">
+    <div>Total Input IPs: <span id="stat-input">0</span></div>
+    <div>Total Used IPs: <span id="stat-used">0</span></div>
+    <div>Remaining IPs: <span id="stat-remaining">0</span></div>
+  </div>
+
+  <div class="entity">
+    <div class="count">ECM4 — <span id="count-ecm4">0</span> IPs</div>
+    <textarea id="output-ecm4" readonly></textarea>
+  </div>
+
+  <div class="entity">
+    <div class="count">ECM7 — <span id="count-ecm7">0</span> IPs</div>
+    <textarea id="output-ecm7" readonly></textarea>
+  </div>
+
+  <div class="entity">
+    <div class="count">ECM10 — <span id="count-ecm10">0</span> IPs</div>
+    <textarea id="output-ecm10" readonly></textarea>
+  </div>
+
+  <div class="footer">
+    Subnet-aware shuffle • User-defined limits • Full statistics
+  </div>
+</div>
+
+<script>
+/**
+ * Subnet round-robin shuffle
+ */
+function roundRobinSubnetFullyRandom(inputText) {
+  const input = inputText
+    .split('\n')
+    .map(v => v.trim())
+    .filter(Boolean);
+
+  const groups = {};
+
+  input.forEach(ip => {
+    const subnet = ip.split('.').slice(0, 3).join('.');
+    if (!groups[subnet]) groups[subnet] = [];
+    groups[subnet].push(ip);
+  });
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+
+  Object.values(groups).forEach(shuffle);
+
+  const subnets = Object.keys(groups);
+  const result = [];
+
+  let added = true;
+  while (added) {
+    added = false;
+    for (const subnet of subnets) {
+      if (groups[subnet].length > 0) {
+        result.push(groups[subnet].shift());
+        added = true;
+      }
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Allocate IPs based on limits and update stats
+ */
+function shuffleIPs() {
+  const rawInput = document.getElementById('input').value;
+
+  const inputIPs = rawInput
+    .split('\n')
+    .map(v => v.trim())
+    .filter(Boolean);
+
+  const shuffled = roundRobinSubnetFullyRandom(rawInput);
+
+  const limits = {
+    ECM4: parseInt(document.getElementById('limit-ecm4').value) || 0,
+    ECM7: parseInt(document.getElementById('limit-ecm7').value) || 0,
+    ECM10: parseInt(document.getElementById('limit-ecm10').value) || 0
+  };
+
+  const ECM4 = [];
+  const ECM7 = [];
+  const ECM10 = [];
+
+  let index = 0;
+
+  function take(target, limit) {
+    while (target.length < limit && index < shuffled.length) {
+      target.push(shuffled[index++]);
+    }
+  }
+
+  take(ECM4, limits.ECM4);
+  take(ECM7, limits.ECM7);
+  take(ECM10, limits.ECM10);
+
+  // Update outputs
+  document.getElementById('output-ecm4').value = ECM4.join('\n');
+  document.getElementById('output-ecm7').value = ECM7.join('\n');
+  document.getElementById('output-ecm10').value = ECM10.join('\n');
+
+  // Update per-entity counts
+  document.getElementById('count-ecm4').textContent = ECM4.length;
+  document.getElementById('count-ecm7').textContent = ECM7.length;
+  document.getElementById('count-ecm10').textContent = ECM10.length;
+
+  // Update global stats
+  const totalInput = inputIPs.length;
+  const totalUsed = ECM4.length + ECM7.length + ECM10.length;
+  const remaining = totalInput - totalUsed;
+
+  document.getElementById('stat-input').textContent = totalInput;
+  document.getElementById('stat-used').textContent = totalUsed;
+  document.getElementById('stat-remaining').textContent = remaining;
+}
+</script>
+
+</body>
+</html>
