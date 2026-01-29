@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDP Server Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e1e4e8;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 25px;
+        }
+        
+        .filters-panel {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+        
+        .filters-panel h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .filters-panel h2 i {
+            color: #3498db;
+        }
+        
+        .filter-group {
+            margin-bottom: 25px;
+        }
+        
+        .filter-group h3 {
+            color: #34495e;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .filter-options {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 10px;
+        }
+        
+        .filter-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .filter-option input {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        .filter-option label {
+            cursor: pointer;
+            font-size: 0.95rem;
+            width: 100%;
+            padding: 4px 0;
+        }
+        
+        .filter-option:hover {
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        
+        .filter-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        #applyFilters {
+            background-color: #3498db;
+            color: white;
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        
+        #applyFilters:hover {
+            background-color: #2980b9;
+        }
+        
+        #resetFilters {
+            background-color: #ecf0f1;
+            color: #34495e;
+        }
+        
+        #resetFilters:hover {
+            background-color: #d5dbdb;
+        }
+        
+        .content-panel {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .stats-header h2 {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .stats-header h2 i {
+            color: #2ecc71;
+        }
+        
+        .rdp-totals {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .rdp-total-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            transition: transform 0.2s;
+        }
+        
+        .rdp-total-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .rdp-total-card h4 {
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .rdp-total-card .count {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2ecc71;
+        }
+        
+        .rdp-total-card .label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #e1e4e8;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background-color: #2c3e50;
+            color: white;
+        }
+        
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid #e1e4e8;
+            transition: background-color 0.2s;
+        }
+        
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        td {
+            padding: 15px;
+            font-size: 0.95rem;
+        }
+        
+        .count-ok {
+            color: #2ecc71;
+            font-weight: 600;
+        }
+        
+        .count-not-ok {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        
+        .platform-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .platform-imacros {
+            background-color: #e8f4fc;
+            color: #3498db;
+        }
+        
+        .platform-ecm_app {
+            background-color: #f0e8fc;
+            color: #9b59b6;
+        }
+        
+        .status-bar {
+            display: flex;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e4e8;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .status-bar span {
+            margin-right: 20px;
+        }
+        
+        .status-bar .highlight {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .no-data i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #bdc3c7;
+        }
+        
+        @media (max-width: 1024px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .rdp-totals {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .stats-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .rdp-totals {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>RDP Server Dashboard</h1>
+            <p class="subtitle">Filter by Entité and RDPs Externe with total count ok for each RDP</p>
+        </header>
+        
+        <div class="dashboard">
+            <div class="filters-panel">
+                <h2><i class="fas fa-filter"></i> Filters</h2>
+                
+                <div class="filter-group">
+                    <h3>Entité</h3>
+                    <div class="filter-options" id="entiteFilter"></div>
+                </div>
+                
+                <div class="filter-group">
+                    <h3>RDPs Externe</h3>
+                    <div class="filter-options" id="rdpFilter"></div>
+                </div>
+                
+                <div class="filter-actions">
+                    <button id="applyFilters"><i class="fas fa-check"></i> Apply Filters</button>
+                    <button id="resetFilters"><i class="fas fa-redo"></i> Reset</button>
+                </div>
+            </div>
+            
+            <div class="content-panel">
+                <div class="stats-header">
+                    <h2><i class="fas fa-server"></i> Server Status Overview</h2>
+                    <div id="filterStatus">Showing all servers</div>
+                </div>
+                
+                <div id="rdpTotalsContainer">
+                    <h3>Total Count OK by RDP</h3>
+                    <div class="rdp-totals" id="rdpTotals"></div>
+                </div>
+                
+                <h3>Server Details</h3>
+                <div class="table-container">
+                    <table id="serverTable">
+                        <thead>
+                            <tr>
+                                <th>Entité</th>
+                                <th>Packs</th>
+                                <th>RDPs Externe</th>
+                                <th>Disk</th>
+                                <th>Platform</th>
+                                <th>Old Total</th>
+                                <th>Old OK</th>
+                                <th>Old Not OK</th>
+                                <th>Total</th>
+                                <th>OK</th>
+                                <th>Not OK</th>
+                            </tr>
+                        </thead>
+                        <tbody id="serverTableBody">
+                            <!-- Data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="no-data" id="noDataMessage" style="display: none;">
+                    <i class="fas fa-database"></i>
+                    <p>No servers match the selected filters</p>
+                </div>
+                
+                <div class="status-bar">
+                    <span>Total Servers: <span class="highlight" id="totalServers">0</span></span>
+                    <span>Filtered: <span class="highlight" id="filteredServers">0</span></span>
+                    <span>Last Updated: <span class="highlight" id="lastUpdated">Today</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Server data from the Excel file
+        const serverData = [
+            { entite: "ECM4", packs: "Pack17", rdp: "144.126.129.103", disk: "1.74 TB", platform: "iMACROS", oldTotal: 2332, oldOk: 369, oldNotOk: 1963, total: 2334, ok: 673, notOk: 1661 },
+            { entite: "ECM4", packs: "Pack20", rdp: "144.126.129.103", disk: "", platform: "iMACROS", oldTotal: 917, oldOk: 422, oldNotOk: 495, total: 995, ok: 481, notOk: 514 },
+            { entite: "ECM4", packs: "Pack14", rdp: "144.126.130.165", disk: "1.17 TB", platform: "iMACROS", oldTotal: 1711, oldOk: 774, oldNotOk: 937, total: 1711, ok: 948, notOk: 763 },
+            { entite: "ECM4", packs: "Pack16", rdp: "144.126.130.165", disk: "", platform: "iMACROS", oldTotal: 1711, oldOk: 873, oldNotOk: 838, total: 1711, ok: 948, notOk: 763 },
+            { entite: "ECM4", packs: "Pack19", rdp: "144.126.130.165", disk: "", platform: "iMACROS", oldTotal: 1711, oldOk: 1007, oldNotOk: 704, total: 1711, ok: 948, notOk: 763 },
+            { entite: "ECM4", packs: "Pack21", rdp: "144.126.130.165", disk: "", platform: "iMACROS", oldTotal: 1713, oldOk: 975, oldNotOk: 738, total: 1713, ok: 948, notOk: 765 },
+            { entite: "ECM7", packs: "Pack75", rdp: "144.91.119.93", disk: "3.63 TB", platform: "IMACROS", oldTotal: 4320, oldOk: 985, oldNotOk: 3335, total: 4892, ok: 1097, notOk: 3795 },
+            { entite: "ECM7", packs: "Pack76", rdp: "144.91.119.93", disk: "", platform: "IMACROS", oldTotal: 4320, oldOk: 983, oldNotOk: 3337, total: 4892, ok: 1097, notOk: 3795 },
+            { entite: "ECM10", packs: "Pack96", rdp: "154.53.51.40", disk: "1.74 TB", platform: "iMACROS", oldTotal: 5487, oldOk: 638, oldNotOk: 4849, total: 1297, ok: 637, notOk: 660 },
+            { entite: "ECM10", packs: "Pack97", rdp: "154.53.51.40", disk: "", platform: "iMACROS", oldTotal: 5578, oldOk: 1258, oldNotOk: 4320, total: 1438, ok: 1252, notOk: 186 },
+            { entite: "ECM10", packs: "Pack108", rdp: "161.97.145.244", disk: "931 GB", platform: "iMACROS", oldTotal: 7200, oldOk: 2223, oldNotOk: 4977, total: 2609, ok: 2221, notOk: 388 },
+            { entite: "ECM10", packs: "Pack109", rdp: "161.97.145.244", disk: "", platform: "iMACROS", oldTotal: 3600, oldOk: 1614, oldNotOk: 1986, total: 1846, ok: 1559, notOk: 287 },
+            { entite: "ECM10", packs: "Pack106", rdp: "161.97.158.158", disk: "931 GB", platform: "iMACROS", oldTotal: 7200, oldOk: 2084, oldNotOk: 5116, total: 2701, ok: 2082, notOk: 619 },
+            { entite: "ECM10", packs: "Pack107", rdp: "161.97.158.158", disk: "", platform: "iMACROS", oldTotal: 3600, oldOk: 1521, oldNotOk: 2079, total: 1749, ok: 1516, notOk: 233 },
+            { entite: "ECM10", packs: "Pack104", rdp: "178.18.246.243", disk: "931 GB", platform: "iMACROS", oldTotal: 7200, oldOk: 1471, oldNotOk: 5729, total: 2648, ok: 1447, notOk: 1201 },
+            { entite: "ECM10", packs: "Pack105", rdp: "178.18.246.243", disk: "", platform: "iMACROS", oldTotal: 3600, oldOk: 1407, oldNotOk: 2193, total: 1756, ok: 1404, notOk: 352 },
+            { entite: "ECM10", packs: "Pack98", rdp: "178.18.246.248", disk: "931 GB", platform: "iMACROS", oldTotal: 7200, oldOk: 1552, oldNotOk: 5648, total: 2396, ok: 1551, notOk: 845 },
+            { entite: "ECM10", packs: "Pack99", rdp: "178.18.246.248", disk: "", platform: "iMACROS", oldTotal: 3600, oldOk: 1533, oldNotOk: 2067, total: 1844, ok: 1490, notOk: 354 },
+            { entite: "ECM10", packs: "Pack94", rdp: "185.193.66.147", disk: "1.81 TB", platform: "iMACROS", oldTotal: 5797, oldOk: 655, oldNotOk: 5142, total: 1953, ok: 785, notOk: 1168 },
+            { entite: "ECM10", packs: "Pack95", rdp: "185.193.66.147", disk: "", platform: "iMACROS", oldTotal: 2878, oldOk: 1936, oldNotOk: 942, total: 2058, ok: 1370, notOk: 688 },
+            { entite: "ECM4", packs: "Pack2", rdp: "185.216.75.117", disk: "1.81 TB", platform: "ECM_APP", oldTotal: 5000, oldOk: 1885, oldNotOk: 3115, total: 5000, ok: 1885, notOk: 3115 },
+            { entite: "ECM4", packs: "Pack4", rdp: "194.163.130.102", disk: "1.81 TB", platform: "ECM_APP", oldTotal: 3000, oldOk: 1480, oldNotOk: 1520, total: 3000, ok: 1480, notOk: 1520 },
+            { entite: "ECM4", packs: "Pack1", rdp: "194.163.144.27", disk: "1.74 TB / 931 GB", platform: "ECM_APP", oldTotal: 3999, oldOk: 1367, oldNotOk: 2632, total: 3999, ok: 1367, notOk: 2632 },
+            { entite: "ECM4", packs: "Pack15", rdp: "194.163.144.27", disk: "", platform: "iMACROS", oldTotal: 1914, oldOk: 907, oldNotOk: 1007, total: 1917, ok: 895, notOk: 1022 },
+            { entite: "ECM7", packs: "Pack77", rdp: "194.163.145.187", disk: "1.81 TB", platform: "IMACROS", oldTotal: 2924, oldOk: 28, oldNotOk: 2896, total: 2924, ok: 238, notOk: 2686 },
+            { entite: "ECM7", packs: "Pack79", rdp: "194.163.145.187", disk: "", platform: "IMACROS", oldTotal: 1896, oldOk: 1, oldNotOk: 1895, total: 1896, ok: 734, notOk: 1162 },
+            { entite: "ECM7", packs: "Pack71", rdp: "207.244.243.33", disk: "1.53 TB / 292 GB", platform: "IMACROS", oldTotal: 1861, oldOk: 958, oldNotOk: 903, total: 1680, ok: 913, notOk: 767 },
+            { entite: "ECM7", packs: "Pack72", rdp: "207.244.243.33", disk: "", platform: "IMACROS", oldTotal: 1861, oldOk: 885, oldNotOk: 976, total: 1681, ok: 913, notOk: 768 },
+            { entite: "ECM10", packs: "Pack91", rdp: "5.39.222.70", disk: "1.74 TB", platform: "iMACROS", oldTotal: 2910, oldOk: 945, oldNotOk: 1965, total: 1567, ok: 939, notOk: 628 },
+            { entite: "ECM10", packs: "Pack92", rdp: "5.39.222.70", disk: "", platform: "iMACROS", oldTotal: 2916, oldOk: 1637, oldNotOk: 1279, total: 1940, ok: 1729, notOk: 211 },
+            { entite: "ECM10", packs: "Pack93", rdp: "5.39.222.70", disk: "", platform: "iMACROS", oldTotal: 2001, oldOk: 552, oldNotOk: 1449, total: 1083, ok: 550, notOk: 533 },
+            { entite: "ECM4", packs: "Pack3", rdp: "66.94.120.85", disk: "1.81 TB", platform: "ECM_APP", oldTotal: 3078, oldOk: 145, oldNotOk: 2933, total: 3078, ok: 159, notOk: 2919 },
+            { entite: "ECM7", packs: "Pack73", rdp: "66.94.123.3", disk: "1.53 TB / 292 GB", platform: "IMACROS", oldTotal: 1319, oldOk: 326, oldNotOk: 993, total: 932, ok: 440, notOk: 492 },
+            { entite: "ECM7", packs: "Pack110", rdp: "66.94.123.3", disk: "", platform: "IMACROS", oldTotal: 1320, oldOk: 326, oldNotOk: 994, total: 933, ok: 440, notOk: 493 },
+            { entite: "ECM10", packs: "Pack80", rdp: "70.36.107.56", disk: "1.70 TB", platform: "ECM_APP", oldTotal: 5751, oldOk: 810, oldNotOk: 4941, total: 5751, ok: 810, notOk: 4941 }
+        ];
+
+        // Initialize filter state
+        let selectedEntites = [];
+        let selectedRdps = [];
+        let filteredData = [...serverData];
+        
+        // DOM elements
+        const entiteFilterEl = document.getElementById('entiteFilter');
+        const rdpFilterEl = document.getElementById('rdpFilter');
+        const serverTableBody = document.getElementById('serverTableBody');
+        const rdpTotalsEl = document.getElementById('rdpTotals');
+        const filterStatusEl = document.getElementById('filterStatus');
+        const totalServersEl = document.getElementById('totalServers');
+        const filteredServersEl = document.getElementById('filteredServers');
+        const noDataMessage = document.getElementById('noDataMessage');
+        const applyFiltersBtn = document.getElementById('applyFilters');
+        const resetFiltersBtn = document.getElementById('resetFilters');
+        
+        // Initialize the application
+        function init() {
+            populateFilters();
+            renderTable();
+            renderRdpTotals();
+            updateStatus();
+            
+            // Set up event listeners
+            applyFiltersBtn.addEventListener('click', applyFilters);
+            resetFiltersBtn.addEventListener('click', resetFilters);
+            
+            // Update last updated time
+            const now = new Date();
+            document.getElementById('lastUpdated').textContent = now.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        
+        // Populate filter options
+        function populateFilters() {
+            // Get unique entites and rdps
+            const entites = [...new Set(serverData.map(item => item.entite))];
+            const rdps = [...new Set(serverData.map(item => item.rdp))];
+            
+            // Sort them
+            entites.sort();
+            rdps.sort();
+            
+            // Populate entite filter
+            entiteFilterEl.innerHTML = '';
+            entites.forEach(entite => {
+                const option = document.createElement('div');
+                option.className = 'filter-option';
+                option.innerHTML = `
+                    <input type="checkbox" id="entite-${entite}" value="${entite}">
+                    <label for="entite-${entite}">${entite}</label>
+                `;
+                entiteFilterEl.appendChild(option);
+            });
+            
+            // Populate RDP filter
+            rdpFilterEl.innerHTML = '';
+            rdps.forEach(rdp => {
+                const option = document.createElement('div');
+                option.className = 'filter-option';
+                option.innerHTML = `
+                    <input type="checkbox" id="rdp-${rdp.replace(/\./g, '-')}" value="${rdp}">
+                    <label for="rdp-${rdp.replace(/\./g, '-')}">${rdp}</label>
+                `;
+                rdpFilterEl.appendChild(option);
+            });
+            
+            // Select all by default
+            selectAllFilters();
+        }
+        
+        // Select all filter options by default
+        function selectAllFilters() {
+            const entiteCheckboxes = entiteFilterEl.querySelectorAll('input[type="checkbox"]');
+            const rdpCheckboxes = rdpFilterEl.querySelectorAll('input[type="checkbox"]');
+            
+            entiteCheckboxes.forEach(checkbox => checkbox.checked = true);
+            rdpCheckboxes.forEach(checkbox => checkbox.checked = true);
+            
+            // Update selected arrays
+            selectedEntites = Array.from(entiteCheckboxes).map(cb => cb.value);
+            selectedRdps = Array.from(rdpCheckboxes).map(cb => cb.value);
+        }
+        
+        // Apply filters based on selected options
+        function applyFilters() {
+            // Get selected entites
+            const entiteCheckboxes = entiteFilterEl.querySelectorAll('input[type="checkbox"]:checked');
+            selectedEntites = Array.from(entiteCheckboxes).map(cb => cb.value);
+            
+            // Get selected rdps
+            const rdpCheckboxes = rdpFilterEl.querySelectorAll('input[type="checkbox"]:checked');
+            selectedRdps = Array.from(rdpCheckboxes).map(cb => cb.value);
+            
+            // Apply filters
+            if (selectedEntites.length === 0 && selectedRdps.length === 0) {
+                // If no filters selected, show all data
+                filteredData = [...serverData];
+            } else {
+                filteredData = serverData.filter(item => {
+                    const entiteMatch = selectedEntites.length === 0 || selectedEntites.includes(item.entite);
+                    const rdpMatch = selectedRdps.length === 0 || selectedRdps.includes(item.rdp);
+                    return entiteMatch && rdpMatch;
+                });
+            }
+            
+            // Update UI
+            renderTable();
+            renderRdpTotals();
+            updateStatus();
+        }
+        
+        // Reset all filters
+        function resetFilters() {
+            selectAllFilters();
+            filteredData = [...serverData];
+            renderTable();
+            renderRdpTotals();
+            updateStatus();
+        }
+        
+        // Render the server table
+        function renderTable() {
+            serverTableBody.innerHTML = '';
+            
+            if (filteredData.length === 0) {
+                noDataMessage.style.display = 'block';
+                return;
+            }
+            
+            noDataMessage.style.display = 'none';
+            
+            filteredData.forEach(server => {
+                const row = document.createElement('tr');
+                
+                // Determine platform class for styling
+                const platformClass = server.platform.toLowerCase().includes('imacros') 
+                    ? 'platform-imacros' 
+                    : 'platform-ecm_app';
+                
+                row.innerHTML = `
+                    <td>${server.entite}</td>
+                    <td>${server.packs}</td>
+                    <td>${server.rdp}</td>
+                    <td>${server.disk || '-'}</td>
+                    <td><span class="platform-tag ${platformClass}">${server.platform}</span></td>
+                    <td>${server.oldTotal.toLocaleString()}</td>
+                    <td class="count-ok">${server.oldOk.toLocaleString()}</td>
+                    <td class="count-not-ok">${server.oldNotOk.toLocaleString()}</td>
+                    <td>${server.total.toLocaleString()}</td>
+                    <td class="count-ok">${server.ok.toLocaleString()}</td>
+                    <td class="count-not-ok">${server.notOk.toLocaleString()}</td>
+                `;
+                
+                serverTableBody.appendChild(row);
+            });
+        }
+        
+        // Render RDP totals (total count ok for each RDP)
+        function renderRdpTotals() {
+            rdpTotalsEl.innerHTML = '';
+            
+            // Calculate totals for each RDP
+            const rdpTotals = {};
+            
+            filteredData.forEach(server => {
+                if (!rdpTotals[server.rdp]) {
+                    rdpTotals[server.rdp] = {
+                        totalOk: 0,
+                        totalCount: 0
+                    };
+                }
+                
+                rdpTotals[server.rdp].totalOk += server.ok;
+                rdpTotals[server.rdp].totalCount += 1;
+            });
+            
+            // Sort RDPs by total OK count (descending)
+            const sortedRdps = Object.keys(rdpTotals).sort((a, b) => {
+                return rdpTotals[b].totalOk - rdpTotals[a].totalOk;
+            });
+            
+            // Create cards for each RDP
+            sortedRdps.forEach(rdp => {
+                const card = document.createElement('div');
+                card.className = 'rdp-total-card';
+                card.innerHTML = `
+                    <h4 title="${rdp}">${rdp}</h4>
+                    <div class="count">${rdpTotals[rdp].totalOk.toLocaleString()}</div>
+                    <div class="label">Total OK count (${rdpTotals[rdp].totalCount} server${rdpTotals[rdp].totalCount !== 1 ? 's' : ''})</div>
+                `;
+                rdpTotalsEl.appendChild(card);
+            });
+        }
+        
+        // Update status bar and filter status
+        function updateStatus() {
+            totalServersEl.textContent = serverData.length.toLocaleString();
+            filteredServersEl.textContent = filteredData.length.toLocaleString();
+            
+            // Update filter status text
+            const entiteText = selectedEntites.length === 0 ? 'All Entités' : `${selectedEntites.length} Entit${selectedEntites.length !== 1 ? 'és' : 'é'}`;
+            const rdpText = selectedRdps.length === 0 ? 'All RDPs' : `${selectedRdps.length} RDP${selectedRdps.length !== 1 ? 's' : ''}`;
+            
+            filterStatusEl.textContent = `Filter: ${entiteText} | ${rdpText}`;
+        }
+        
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
